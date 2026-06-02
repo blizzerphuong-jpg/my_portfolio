@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Portfolio | Nhập môn Công nghệ số</title>
+  <meta name="description" content="Portfolio cá nhân - Nhập môn Công nghệ số & Ứng dụng AI" />
+
+  <!-- ===== FONTS ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =====================================================
+       RESET & GLOBAL
+    ===================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* =====================================================
+       DESIGN TOKENS — DARK (DEFAULT)
+    ===================================================== */
+    :root {
+      --bg:          #090910;
+      --bg-surface:  #111118;
+      --bg-card:     #16161f;
+      --text:        #e4e2de;
+      --text-muted:  #8a8884;
+      --text-faint:  #3a3a40;
+      --accent:      #7ef2c8;     /* aquamarine */
+      --accent-mid:  #3ecfa0;
+      --accent-dim:  rgba(126,242,200,.10);
+      --border:      rgba(255,255,255,.07);
+      --border-mid:  rgba(255,255,255,.13);
+      --shadow:      rgba(0,0,0,.55);
+
+      --font-display: 'Fraunces', serif;
+      --font-body:    'Plus Jakarta Sans', sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
+
+      --radius:     12px;
+      --t:          0.28s cubic-bezier(.4,0,.2,1);
+
+      color-scheme: dark;
+    }
+
+    /* =====================================================
+       DESIGN TOKENS — LIGHT
+    ===================================================== */
+    [data-theme="light"] {
+      --bg:          #f5f3ef;
+      --bg-surface:  #ffffff;
+      --bg-card:     #ffffff;
+      --text:        #1a1917;
+      --text-muted:  #6b6966;
+      --text-faint:  #c8c5c0;
+      --accent:      #1a7a5a;
+      --accent-mid:  #1a7a5a;
+      --accent-dim:  rgba(26,122,90,.10);
+      --border:      rgba(0,0,0,.08);
+      --border-mid:  rgba(0,0,0,.15);
+      --shadow:      rgba(0,0,0,.10);
+      color-scheme: light;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family:      var(--font-body);
+      background-color: var(--bg);
+      color:            var(--text);
+      line-height:      1.65;
+      transition:       background-color var(--t), color var(--t);
+      overflow-x:       hidden;
+    }
+
+    /* =====================================================
+       SCROLL PROGRESS BAR
+    ===================================================== */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0;
+      height: 2px; width: 0;
+      background: var(--accent);
+      z-index: 300;
+      transition: width .08s linear;
+    }
+
+    /* =====================================================
+       NAVIGATION
+    ===================================================== */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1.25rem, 5vw, 4rem);
+      height: 62px;
+      background: rgba(9,9,16,.72);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--t), border-color var(--t);
+    }
+    [data-theme="light"] .nav { background: rgba(245,243,239,.82); }
+
+    .nav-logo {
+      font-family: var(--font-mono); font-size: .72rem; font-weight: 500;
+      color: var(--accent); text-decoration: none;
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 1.75rem; list-style: none;
+    }
+    @media(max-width:600px){ .nav-links { display: none; } }
+
+    .nav-links a {
+      font-size: .82rem; font-weight: 500;
+      color: var(--text-muted); text-decoration: none;
+      transition: color var(--t);
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-right { display: flex; align-items: center; gap: .75rem; }
+
+    .theme-btn {
+      background: none; border: 1px solid var(--border);
+      color: var(--text-muted); cursor: pointer;
+      padding: .35rem .85rem; border-radius: 999px;
+      font-size: .72rem; font-family: var(--font-mono);
+      transition: all var(--t); white-space: nowrap;
+    }
+    .theme-btn:hover { color: var(--text); border-color: var(--border-mid); }
+
+    /* =====================================================
+       SECTION SHELL
+    ===================================================== */
+    .section-wrap {
+      max-width: 1100px; margin: 0 auto;
+      padding: 6rem clamp(1.25rem, 5vw, 4rem);
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono); font-size: .66rem;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: .6rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.85rem, 4.5vw, 3rem);
+      font-weight: 600; line-height: 1.15;
+      letter-spacing: -.025em; margin-bottom: .9rem;
+    }
+
+    .section-desc {
+      color: var(--text-muted); font-size: .95rem;
+      max-width: 580px; line-height: 1.75; margin-bottom: 2.75rem;
+    }
+
+    .hr { height: 1px; background: var(--border); }
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+    #home {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px clamp(1.25rem, 5vw, 4rem) 4rem;
+      max-width: 1100px; margin: 0 auto;
+      position: relative;
+    }
+
+    /* decorative glow */
+    #home::after {
+      content: '';
+      position: fixed; top: 0; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle at center, rgba(126,242,200,.06) 0%, transparent 65%);
+      pointer-events: none; z-index: -1;
+    }
+
+    .hero-label {
+      font-family: var(--font-mono); font-size: .72rem;
+      color: var(--accent); letter-spacing: .1em; text-transform: uppercase;
+      margin-bottom: 1.4rem;
+      opacity: 0; animation: fadeUp .55s ease forwards .2s;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 600; line-height: 1.08;
+      letter-spacing: -.03em; margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp .55s ease forwards .4s;
+    }
+    .hero-title em { font-style: italic; color: var(--accent); }
+
+    .hero-sub {
+      font-size: clamp(.95rem, 2vw, 1.1rem);
+      color: var(--text-muted); max-width: 550px;
+      line-height: 1.78; margin-bottom: 2.5rem;
+      opacity: 0; animation: fadeUp .55s ease forwards .6s;
+    }
+
+    .hero-cta {
+      display: flex; gap: .9rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp .55s ease forwards .78s;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: .45rem;
+      padding: .7rem 1.5rem; border-radius: 999px;
+      font-size: .85rem; font-weight: 600;
+      text-decoration: none; transition: all var(--t); cursor: pointer;
+    }
+    .btn-primary  { background: var(--accent); color: #090910; }
+    .btn-primary:hover  { opacity: .88; transform: translateY(-2px); }
+    .btn-secondary{ background: transparent; color: var(--text); border: 1px solid var(--border-mid); }
+    .btn-secondary:hover{ border-color: var(--text-muted); transform: translateY(-2px); }
+
+    .scroll-hint {
+      margin-top: 3.5rem;
+      font-family: var(--font-mono); font-size: .68rem;
+      color: var(--text-faint); letter-spacing: .06em;
+      display: flex; align-items: center; gap: .5rem;
+      opacity: 0; animation: fadeIn .6s ease forwards 1.1s;
+    }
+    .scroll-hint::after { content: '↓'; animation: nudge 2s ease infinite; }
+
+    /* =====================================================
+       ABOUT CARDS
+    ===================================================== */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .info-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem 1.4rem;
+      transition: border-color var(--t);
+    }
+    .info-card:hover { border-color: var(--border-mid); }
+    .info-card.wide { grid-column: 1 / -1; }
+
+    .info-card-label {
+      font-family: var(--font-mono); font-size: .62rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: .45rem;
+    }
+    .info-card-value {
+      font-size: .95rem; font-weight: 600; color: var(--text);
+      line-height: 1.4;
+    }
+
+    .goal-list { list-style: none; display: flex; flex-direction: column; gap: .55rem; margin-top: .5rem; }
+    .goal-list li {
+      display: flex; align-items: flex-start; gap: .65rem;
+      font-size: .875rem; color: var(--text-muted); line-height: 1.5;
+    }
+    .goal-list li::before { content: '→'; color: var(--accent); flex-shrink: 0; padding-top: .05rem; }
+
+    /* =====================================================
+       PROJECT CARDS
+    ===================================================== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 470px), 1fr));
+      gap: 1.1rem;
+    }
+
+    .project-card {
+      position: relative; overflow: hidden;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.65rem;
+      text-decoration: none; color: inherit;
+      display: flex; flex-direction: column; gap: .85rem;
+      transition: all var(--t);
+    }
+    .project-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--accent-dim), transparent);
+      opacity: 0; transition: opacity var(--t);
+    }
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px var(--shadow);
+    }
+    .project-card:hover::before { opacity: 1; }
+
+    .project-num {
+      font-family: var(--font-mono); font-size: .66rem;
+      color: var(--accent); letter-spacing: .08em;
+    }
+
+    .project-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 1rem;
+    }
+
+    .project-title {
+      font-family: var(--font-display);
+      font-size: 1.08rem; font-weight: 600; line-height: 1.3;
+    }
+
+    .project-arrow {
+      color: var(--text-faint); font-size: 1.15rem;
+      flex-shrink: 0; transition: all var(--t);
+    }
+    .project-card:hover .project-arrow {
+      color: var(--accent); transform: translate(4px,-4px);
+    }
+
+    .project-desc {
+      font-size: .845rem; color: var(--text-muted);
+      line-height: 1.68; flex: 1;
+    }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: .45rem; }
+    .tag {
+      font-family: var(--font-mono); font-size: .6rem;
+      padding: .22rem .6rem; border-radius: 999px;
+      background: var(--accent-dim); color: var(--accent);
+      letter-spacing: .04em;
+    }
+
+    /* =====================================================
+       REFLECTION / ACCORDION
+    ===================================================== */
+    .accordion { display: flex; flex-direction: column; }
+    .acc-item { border-bottom: 1px solid var(--border); }
+
+    .acc-hdr {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.6rem 0; cursor: pointer; user-select: none;
+    }
+
+    .acc-num {
+      font-family: var(--font-mono); font-size: .68rem;
+      color: var(--accent); width: 1.75rem; flex-shrink: 0;
+    }
+
+    .acc-title {
+      font-family: var(--font-display);
+      font-size: 1.12rem; font-weight: 500; flex: 1;
+    }
+
+    .acc-icon {
+      font-size: 1.3rem; color: var(--text-muted);
+      transition: transform var(--t); flex-shrink: 0; line-height: 1;
+    }
+    .acc-item.open .acc-icon { transform: rotate(45deg); }
+
+    .acc-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height .42s cubic-bezier(.4,0,.2,1);
+    }
+    .acc-item.open .acc-body { max-height: 1200px; }
+
+    .acc-content {
+      padding: .25rem 0 2.2rem 2.75rem;
+      font-size: .875rem; color: var(--text-muted); line-height: 1.8;
+    }
+    .acc-content h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem; font-weight: 600; color: var(--text);
+      margin-bottom: .75rem;
+    }
+    .acc-content p { margin-bottom: 1rem; }
+
+    .acc-content ul { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+    .acc-content ul li {
+      display: flex; align-items: flex-start; gap: .65rem;
+    }
+    .acc-content ul li::before {
+      content: '·'; color: var(--accent);
+      font-size: 1.5rem; line-height: .8; flex-shrink: 0;
+    }
+
+    /* Skill chips inside accordion */
+    .skill-chips {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px,1fr));
+      gap: .85rem; margin-top: 1rem;
+    }
+    .chip {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.1rem;
+      transition: border-color var(--t);
+    }
+    .chip:hover { border-color: var(--border-mid); }
+    .chip-icon { font-size: 1.3rem; margin-bottom: .5rem; }
+    .chip-name { font-weight: 600; font-size: .875rem; color: var(--text); margin-bottom: .2rem; }
+    .chip-desc { font-size: .76rem; color: var(--text-muted); }
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.75rem clamp(1.25rem, 5vw, 4rem);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    footer p {
+      font-size: .76rem; color: var(--text-faint);
+      font-family: var(--font-mono);
+    }
+    footer a {
+      font-size: .76rem; font-family: var(--font-mono);
+      color: var(--text-muted); text-decoration: none;
+      transition: color var(--t);
+    }
+    footer a:hover { color: var(--accent); }
+
+    /* =====================================================
+       SCROLL ANIMATIONS
+    ===================================================== */
+    .fade-up {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .fade-up.in { opacity: 1; transform: translateY(0); }
+
+    /* =====================================================
+       KEYFRAMES
+    ===================================================== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    @keyframes nudge {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(7px); }
+    }
+
+    /* =====================================================
+       RESPONSIVE TWEAKS
+    ===================================================== */
+    @media(max-width:680px){
+      .projects-grid { grid-template-columns: 1fr; }
+      .skill-chips   { grid-template-columns: 1fr 1fr; }
+      .acc-content   { padding-left: 1rem; }
+      .acc-title     { font-size: 1rem; }
+    }
+    @media(max-width:440px){
+      .skill-chips { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ====== SCROLL PROGRESS ====== -->
+<div id="scroll-progress"></div>
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+<nav class="nav">
+  <a href="#home" class="nav-logo">DP / Portfolio</a>
+
+  <ul class="nav-links">
+    <li><a href="#home">Trang chủ</a></li>
+    <li><a href="#about">Giới thiệu</a></li>
+    <li><a href="#projects">Bài tập</a></li>
+    <li><a href="#reflection">Tổng kết</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">☾ Theme</button>
+  </div>
+</nav>
+
+<!-- =====================================================
+     HERO — Trang chủ
+===================================================== -->
+<section id="home">
+  <p class="hero-label">Nhập môn Công nghệ số &amp; Ứng dụng AI</p>
+
+  <h1 class="hero-title">
+    Xin chào, mình là<br>
+    <!-- ✏️ EDIT: Thay [Tên của bạn] bằng tên thật -->
+    <em>[Tên của bạn]</em>
+  </h1>
+
+  <!-- ✏️ EDIT: Mô tả ngắn về bản thân -->
+  <p class="hero-sub">
+    Sinh viên [Ngành học] · [Tên trường]. Portfolio cá nhân ghi lại hành trình học tập
+    và thực hành các kỹ năng công nghệ số — từ quản lý tệp tin, tìm kiếm thông tin
+    đến sáng tạo nội dung với AI có trách nhiệm.
+  </p>
+
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-primary">Xem bài tập ↓</a>
+    <a href="#reflection" class="btn btn-secondary">Đọc tổng kết →</a>
+  </div>
+
+  <div class="scroll-hint" aria-hidden="true">Cuộn xuống&nbsp;</div>
+</section>
+
+<div class="hr"></div>
+
+<!-- =====================================================
+     ABOUT — Trang Giới Thiệu
+===================================================== -->
+<section id="about">
+  <div class="section-wrap">
+    <p class="eyebrow fade-up">I. Trang Giới Thiệu</p>
+    <h2 class="section-title fade-up">Về bản thân tôi</h2>
+    <p class="section-desc fade-up">
+      Một vài thông tin cơ bản, mục tiêu học tập và lý do mình xây dựng Portfolio này.
+    </p>
+
+    <div class="info-grid">
+      <!-- ✏️ EDIT: Điền thông tin cá nhân vào các card bên dưới -->
+      <div class="info-card fade-up">
+        <div class="info-card-label">Họ và tên</div>
+        <div class="info-card-value">[Họ và tên đầy đủ]</div>
+      </div>
+
+      <div class="info-card fade-up">
+        <div class="info-card-label">Mã số sinh viên</div>
+        <div class="info-card-value">[MSSV]</div>
+      </div>
+
+      <div class="info-card fade-up">
+        <div class="info-card-label">Ngành học</div>
+        <div class="info-card-value">[Tên ngành] · [Khoa / Trường]</div>
+      </div>
+
+      <div class="info-card fade-up">
+        <div class="info-card-label">Sở thích</div>
+        <!-- ✏️ EDIT: Sở thích cá nhân -->
+        <div class="info-card-value">[Sở thích 1], [Sở thích 2]</div>
+      </div>
+
+      <div class="info-card fade-up">
+        <div class="info-card-label">Học phần</div>
+        <div class="info-card-value">Nhập môn Công nghệ số &amp; Ứng dụng AI</div>
+      </div>
+
+      <div class="info-card fade-up">
+        <div class="info-card-label">Năm học</div>
+        <div class="info-card-value">2025 – 2026</div>
+      </div>
+
+      <!-- Wide card: mục tiêu -->
+      <div class="info-card wide fade-up">
+        <div class="info-card-label">Mục tiêu học tập &amp; Mục đích của Portfolio</div>
+        <!-- ✏️ EDIT: Thêm/bớt các mục tiêu cho phù hợp với bản thân -->
+        <ul class="goal-list">
+          <li>Thể hiện các kỹ năng số đã học qua các bài tập thực hành trong học phần.</li>
+          <li>Lưu trữ sản phẩm cá nhân để dễ dàng truy cập và chia sẻ.</li>
+          <li>[Mục tiêu học tập cá nhân — ví dụ: Nắm vững tư duy tìm kiếm và đánh giá thông tin]</li>
+          <li>[Định hướng phát triển — ví dụ: Ứng dụng AI một cách có trách nhiệm trong học tập và nghiên cứu]</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- =====================================================
+     PROJECTS — Cây Bài Tập
+===================================================== -->
+<section id="projects">
+  <div class="section-wrap">
+    <p class="eyebrow fade-up">II. Trang Dự Án</p>
+    <h2 class="section-title fade-up">Cây bài tập</h2>
+    <p class="section-desc fade-up">
+      Tổng hợp và trình bày các bài tập đã hoàn thành trong học phần.
+      Nhấn vào từng bài để xem sản phẩm chi tiết.
+    </p>
+
+    <div class="projects-grid">
+
+      <!-- ===== BÀI 1 ===== -->
+      <!-- ✏️ EDIT: href → link Google Drive hoặc file PDF bài tập 1 -->
+      <a href="#" class="project-card fade-up" target="_blank" rel="noopener noreferrer">
+        <span class="project-num">Bài tập 1 · Mục 1.4</span>
+        <div class="project-header">
+          <h3 class="project-title">Thao tác cơ bản với tệp tin và thư mục</h3>
+          <span class="project-arrow">↗</span>
+        </div>
+        <p class="project-desc">
+          <!-- ✏️ EDIT: Tóm tắt ngắn quá trình thực hiện và sản phẩm cuối -->
+          Trình bày cấu trúc thư mục tối ưu và quy tắc đặt tên đã thiết lập, kèm ảnh chụp
+          minh hoạ. Thực hành File Explorer, tạo cây thư mục khoa học và quản lý tài nguyên
+          cá nhân.
+        </p>
+        <div class="tag-row">
+          <span class="tag">File System</span>
+          <span class="tag">Tổ chức dữ liệu</span>
+          <span class="tag">Windows</span>
+        </div>
+      </a>
+
+      <!-- ===== BÀI 2 ===== -->
+      <!-- ✏️ EDIT: href → link Google Drive hoặc file PDF bài tập 2 -->
+      <a href="#" class="project-card fade-up" target="_blank" rel="noopener noreferrer">
+        <span class="project-num">Bài tập 2 · Mục 2.4</span>
+        <div class="project-header">
+          <h3 class="project-title">Tìm kiếm và đánh giá thông tin học thuật</h3>
+          <span class="project-arrow">↗</span>
+        </div>
+        <p class="project-desc">
+          <!-- ✏️ EDIT: Tóm tắt ngắn quá trình thực hiện và sản phẩm cuối -->
+          Trình bày kết quả tìm kiếm học thuật bằng các toán tử nâng cao và bảng đánh giá
+          nguồn tin đã thực hiện. Áp dụng tiêu chí CRAAP để đánh giá độ tin cậy của các
+          nguồn thông tin.
+        </p>
+        <div class="tag-row">
+          <span class="tag">Research</span>
+          <span class="tag">Search Operators</span>
+          <span class="tag">Fact-checking</span>
+        </div>
+      </a>
+
+      <!-- ===== BÀI 3 ===== -->
+      <!-- ✏️ EDIT: href → link Google Drive hoặc file PDF bài tập 3 -->
+      <a href="#" class="project-card fade-up" target="_blank" rel="noopener noreferrer">
+        <span class="project-num">Bài tập 3 · Mục 3.4</span>
+        <div class="project-header">
+          <h3 class="project-title">Viết Prompt hiệu quả cho các tác vụ học tập</h3>
+          <span class="project-arrow">↗</span>
+        </div>
+        <p class="project-desc">
+          <!-- ✏️ EDIT: Tóm tắt ngắn quá trình thực hiện và sản phẩm cuối -->
+          Trình bày sự so sánh giữa Prompt ban đầu và Prompt cải tiến cùng kết quả đầu ra
+          từ AI. Áp dụng kỹ thuật Prompt Engineering để tối ưu hoá kết quả cho các tác vụ
+          học thuật.
+        </p>
+        <div class="tag-row">
+          <span class="tag">Prompt Engineering</span>
+          <span class="tag">AI</span>
+          <span class="tag">So sánh</span>
+        </div>
+      </a>
+
+      <!-- ===== BÀI 4 ===== -->
+      <!-- ✏️ EDIT: href → link Google Drive hoặc file PDF bài tập 4 -->
+      <a href="#" class="project-card fade-up" target="_blank" rel="noopener noreferrer">
+        <span class="project-num">Bài tập 4 · Mục 4.4</span>
+        <div class="project-header">
+          <h3 class="project-title">Sử dụng công cụ hợp tác trực tuyến cho dự án nhóm</h3>
+          <span class="project-arrow">↗</span>
+        </div>
+        <p class="project-desc">
+          <!-- ✏️ EDIT: Tóm tắt ngắn quá trình thực hiện và sản phẩm cuối -->
+          Trình bày minh chứng về việc sử dụng công cụ quản lý dự án nhóm và cách thức phối
+          hợp trực tuyến. Thực hành Trello, Google Docs, Drive và Slack trong môi trường làm
+          việc nhóm.
+        </p>
+        <div class="tag-row">
+          <span class="tag">Teamwork</span>
+          <span class="tag">Trello</span>
+          <span class="tag">Cloud Tools</span>
+        </div>
+      </a>
+
+      <!-- ===== BÀI 5 ===== -->
+      <!-- ✏️ EDIT: href → link Google Drive hoặc file PDF bài tập 5 -->
+      <a href="#" class="project-card fade-up" target="_blank" rel="noopener noreferrer">
+        <span class="project-num">Bài tập 5 · Mục 5.4</span>
+        <div class="project-header">
+          <h3 class="project-title">Sử dụng AI tạo sinh để hỗ trợ sáng tạo nội dung</h3>
+          <span class="project-arrow">↗</span>
+        </div>
+        <p class="project-desc">
+          <!-- ✏️ EDIT: Tóm tắt ngắn quá trình thực hiện và sản phẩm cuối -->
+          Trưng bày sản phẩm nội dung số hoàn thiện (hình ảnh, video hoặc bài viết) được hỗ
+          trợ bởi AI. Ứng dụng Generative AI để tạo nội dung sáng tạo và trình bày quy trình
+          thực hiện.
+        </p>
+        <div class="tag-row">
+          <span class="tag">GenAI</span>
+          <span class="tag">Creative</span>
+          <span class="tag">Content</span>
+        </div>
+      </a>
+
+      <!-- ===== BÀI 6 ===== -->
+      <!-- ✏️ EDIT: href → link Google Drive hoặc file PDF bài tập 6 -->
+      <a href="#" class="project-card fade-up" target="_blank" rel="noopener noreferrer">
+        <span class="project-num">Bài tập 6 · Mục 6.4</span>
+        <div class="project-header">
+          <h3 class="project-title">Sử dụng AI có trách nhiệm trong học tập và nghiên cứu</h3>
+          <span class="project-arrow">↗</span>
+        </div>
+        <p class="project-desc">
+          <!-- ✏️ EDIT: Tóm tắt ngắn quá trình thực hiện và sản phẩm cuối -->
+          Trình bày bộ nguyên tắc cá nhân về sử dụng AI có trách nhiệm dựa trên các nghiên
+          cứu đã thực hiện. Nghiên cứu các nguyên tắc đạo đức AI và áp dụng vào case study
+          thực tế.
+        </p>
+        <div class="tag-row">
+          <span class="tag">AI Ethics</span>
+          <span class="tag">Responsibility</span>
+          <span class="tag">Integrity</span>
+        </div>
+      </a>
+
+    </div><!-- /projects-grid -->
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- =====================================================
+     REFLECTION — Tổng Kết
+===================================================== -->
+<section id="reflection">
+  <div class="section-wrap">
+    <p class="eyebrow fade-up">III. Trang Tổng Kết</p>
+    <h2 class="section-title fade-up">Cảm nhận &amp; Bài học</h2>
+    <p class="section-desc fade-up">
+      Nhìn lại hành trình học tập và những kỹ năng đã tích lũy được sau học phần này.
+    </p>
+
+    <div class="accordion">
+
+      <!-- ① Cảm nhận -->
+      <div class="acc-item open fade-up">
+        <div class="acc-hdr" onclick="toggleAcc(this)">
+          <span class="acc-num">①</span>
+          <h3 class="acc-title">Cảm nhận của tôi sau hành trình này</h3>
+          <span class="acc-icon">+</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-content">
+            <h3>Nhìn lại toàn bộ quá trình</h3>
+            <!-- ✏️ EDIT: Chia sẻ cảm nhận cá nhân của bạn -->
+            <p>
+              [Chia sẻ những trải nghiệm và cảm nhận cá nhân về quá trình thực hiện dự án Portfolio.
+              Học phần này đã thay đổi cách nhìn của bạn về công nghệ số như thế nào? Bạn đã học được
+              gì ngoài kiến thức kỹ thuật?]
+            </p>
+            <p>
+              [Thêm đoạn chia sẻ nếu cần — cảm nhận trước và sau khi học học phần, những khoảnh khắc
+              đáng nhớ trong quá trình hoàn thiện các bài tập...]
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② Kỹ năng -->
+      <div class="acc-item fade-up">
+        <div class="acc-hdr" onclick="toggleAcc(this)">
+          <span class="acc-num">②</span>
+          <h3 class="acc-title">Kỹ năng quan trọng nhất đã tích lũy</h3>
+          <span class="acc-icon">+</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-content">
+            <h3>Bốn kỹ năng lớn đã làm chủ</h3>
+            <!-- ✏️ EDIT: Chỉnh sửa tên và mô tả kỹ năng cho phù hợp với bản thân -->
+            <div class="skill-chips">
+              <div class="chip">
+                <div class="chip-icon">📁</div>
+                <div class="chip-name">Quản lý &amp; Tổ chức dữ liệu</div>
+                <div class="chip-desc">Cây thư mục khoa học, quy tắc đặt tên file</div>
+              </div>
+              <div class="chip">
+                <div class="chip-icon">🔍</div>
+                <div class="chip-name">Tìm kiếm &amp; Đánh giá thông tin</div>
+                <div class="chip-desc">Toán tử nâng cao, tiêu chí CRAAP</div>
+              </div>
+              <div class="chip">
+                <div class="chip-icon">✍️</div>
+                <div class="chip-name">Prompt Engineering</div>
+                <div class="chip-desc">Viết prompt hiệu quả, có vai trò &amp; bối cảnh rõ ràng</div>
+              </div>
+              <div class="chip">
+                <div class="chip-icon">🤝</div>
+                <div class="chip-name">Hợp tác trực tuyến</div>
+                <div class="chip-desc">Trello, Google Docs, Drive, Slack</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ Thách thức -->
+      <div class="acc-item fade-up">
+        <div class="acc-hdr" onclick="toggleAcc(this)">
+          <span class="acc-num">③</span>
+          <h3 class="acc-title">Điều tâm đắc &amp; Khó khăn đã vượt qua</h3>
+          <span class="acc-icon">+</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-content">
+            <h3>Những thách thức &amp; giải pháp</h3>
+            <!-- ✏️ EDIT: Thêm khó khăn thực tế bạn gặp và cách giải quyết -->
+            <ul>
+              <li><strong>[Khó khăn 1]:</strong> [Mô tả vấn đề gặp phải và cách bạn đã giải quyết].</li>
+              <li><strong>[Khó khăn 2]:</strong> [Mô tả vấn đề gặp phải và cách bạn đã giải quyết].</li>
+              <li><strong>[Khó khăn 3]:</strong> [Mô tả vấn đề gặp phải và cách bạn đã giải quyết].</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ④ Lời kết -->
+      <div class="acc-item fade-up">
+        <div class="acc-hdr" onclick="toggleAcc(this)">
+          <span class="acc-num">④</span>
+          <h3 class="acc-title">Lời kết &amp; Định hướng tương lai</h3>
+          <span class="acc-icon">+</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-content">
+            <h3>Định hướng tương lai</h3>
+            <!-- ✏️ EDIT: Lời kết và kế hoạch tương lai của bạn -->
+            <p>
+              [Portfolio này khép lại một học phần nhưng mở ra điều gì cho bạn? Bạn sẽ áp dụng những
+              kỹ năng đã học như thế nào trong con đường học tập và sự nghiệp phía trước?]
+            </p>
+            <p>
+              [Thêm định hướng cụ thể — ví dụ: Tôi sẽ tiếp tục áp dụng Prompt Engineering vào việc
+              nghiên cứu, sử dụng AI một cách có trách nhiệm và không ngừng cập nhật kiến thức công
+              nghệ số trong tương lai.]
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /accordion -->
+  </div>
+</section>
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+<footer>
+  <!-- ✏️ EDIT: Thay [Tên của bạn] và thông tin trường -->
+  <p>© 2026 · <strong>[Tên của bạn]</strong> · Portfolio cá nhân · Nhập môn Công nghệ số · [Khoa/Trường]</p>
+  <a href="#home">↑ Lên đầu trang</a>
+</footer>
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+<script>
+  /* ---------- Theme Toggle ---------- */
+  const btn  = document.getElementById('themeBtn');
+  const html = document.documentElement;
+  const saved = localStorage.getItem('theme') || 'dark';
+  html.setAttribute('data-theme', saved);
+  btn.textContent = saved === 'dark' ? '☀ Theme' : '☾ Theme';
+
+  btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    btn.textContent = next === 'dark' ? '☀ Theme' : '☾ Theme';
+  });
+
+  /* ---------- Scroll Progress ---------- */
+  const bar = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+    bar.style.width = (pct * 100) + '%';
+  }, { passive: true });
+
+  /* ---------- Accordion ---------- */
+  function toggleAcc(hdr) {
+    const item    = hdr.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.acc-item').forEach(el => el.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  }
+
+  /* ---------- Fade-up on scroll ---------- */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('in'), i * 70);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  /* ---------- Active nav link ---------- */
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.style.color = '');
+        const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+        if (active) active.style.color = 'var(--accent)';
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+
+  sections.forEach(s => navObserver.observe(s));
+</script>
+
+</body>
+</html>
